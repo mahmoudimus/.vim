@@ -95,6 +95,15 @@ set history=500
 
 "set co=80
 "set lines=25
+ " turn on wild mode huge list"
+set wildmode=list:longest
+
+set wildmenu " turn on command line completion wild style
+
+" ignore these list file extensions
+set wildignore=*.dll,*.o,*.obj,*.bak,*.exe,*.pyc,
+               \*.jpg,*.gif,*.png
+
 set tabpagemax=30   " maximum number of tabs
 set number          " show line numbers
 set ruler           " show ruler
@@ -157,6 +166,10 @@ inoremap <expr> <C-Space> pumvisible() \|\| &omnifunc == '' ?
 \ "\" \\<lt>bs>\\<lt>C-n>\"\<CR>"
 imap <C-@> <C-Space>
 
+" open a tag view split or in another vertical pane
+map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
 " use 256 colors
 set t_Co=256
 
@@ -166,6 +179,9 @@ au FileType * setl fo-=cro
 " buffermovement for buflist
 noremap bT :bprev<CR>
 noremap bt :bnext<CR>
+
+" show the tab number on the tabs followed by the basename
+" set guitablabel=%m%N\ %f
 
 " global settings for buff list, show only basename of the file
 :let g:buftabs_only_basename=1
@@ -201,13 +217,15 @@ func! CompileRunGcc()
   exec "! ./%<"
 endfunc
 
+" save as root if you accidentally opened a file to be saved as non-root
+cmap w!! %!sudo tee > /dev/null %
+
 " tags
 "-----------------------------
 " configuring tags -- add additional tags here or comment out not-used ones
-set tags=tags
-set tags+=$VIMRUNTIME/tags
-set tags+=/usr/local/lib/python2.6/dist-packages/
-set tags+=/
+set tags+=tags;/
+" set tags+=$VIMRUNTIME/tags
+" set tags+=/
 
 " buiding a recursive ctag database from the current directory 
 " mapping Control-F12 

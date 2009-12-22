@@ -1,7 +1,8 @@
 snippet #!
-	#!/usr/bin/python
+	#!/usr/bin/env python
 	# -*- coding: ${1:utf-8} -*-
 	# rcsid = "$Id:$"
+	${2}
 snippet imp
 	import ${1:module}
 # Module Docstring
@@ -102,3 +103,7 @@ snippet docq
 	"""
 	${1:docstring}
 	"""
+# logging
+snippet logg
+	import logging
+	${1:logger} = logging.getLogger(${2:__name__})
