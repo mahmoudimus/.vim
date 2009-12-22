@@ -112,7 +112,7 @@ set showcmd         " show command line
 set expandtab       " turns tabs into spaces
 set tabstop=4       " number of spaces per tab
 set autoindent      
-set smartindent
+set nosmartindent
 set shiftwidth=4    " number of spaces per shift
 
 set showmatch       " brace matching
@@ -133,18 +133,18 @@ endif
 " colorscheme ir_black
 colorscheme lucius
 hi Normal guifg=White guibg=grey12
-set gfn=FreeMono\ 12
+"set global font
+set gfn=Monaco\ 10
 
 "don't start in insert mode, that's annoying
 "start               " start vim in insert mode
 
 "        set <S-Up>="        set <S-Down>=
 
-"set global font
-set gfn=Monaco\ 10
 
 " filetype plugins are now turned on
 filetype plugin on
+filetype indent on
 
 " adding omnifunc auto completion
 autocmd FileType python set omnifunc=pythoncomplete#Complete
@@ -186,6 +186,15 @@ noremap bt :bnext<CR>
 " global settings for buff list, show only basename of the file
 :let g:buftabs_only_basename=1
 
+" match highlights
+" ================= 
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+
+" match OverLength /\%81v.*/
+au BufWinEnter * let w:m1=matchadd('Search', '\%<81v.\%>77v', -1)
+au BufWinEnter * let w:m2=matchadd('OverLength', '\%>81v.\+', -1)
+
+" Switch off :match highlighting.
 " python syntax highlighting
 :let python_highlight_all = 1
 
