@@ -170,8 +170,11 @@ imap <C-@> <C-Space>
 map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
-" use 256 colors
-set t_Co=256
+" use 256 colors if they're available, else default to 
+" 16 for the sad people who still use non-256 terminals
+if &term == "xterm"
+    set t_Co=256
+endif
 
 " disable auto commenting..
 au FileType * setl fo-=cro
