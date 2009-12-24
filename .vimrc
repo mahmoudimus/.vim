@@ -191,8 +191,8 @@ noremap bt :bnext<CR>
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 
 " match OverLength /\%81v.*/
-au BufWinEnter * let w:m1=matchadd('Search', '\%<81v.\%>77v', -1)
-au BufWinEnter * let w:m2=matchadd('OverLength', '\%>81v.\+', -1)
+" au BufWinEnter * let w:m1=matchadd('Search', '\%<81v.\%>77v', -1)
+au BufWinEnter * let w:ol=matchadd('OverLength', '\%>81v.\+', -1)
 
 " Switch off :match highlighting.
 " python syntax highlighting
