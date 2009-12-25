@@ -129,13 +129,6 @@ if has('autocmd')
     autocmd GUIEnter * set vb t_vb=
 endif 
 
-" colorscheme desert
-" colorscheme ir_black
-colorscheme lucius
-hi Normal guifg=White guibg=grey12
-"set global font
-set gfn=Monaco\ 10
-
 "don't start in insert mode, that's annoying
 "start               " start vim in insert mode
 
@@ -170,11 +163,19 @@ imap <C-@> <C-Space>
 map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
+" colorscheme desert
+" colorscheme ir_black
 " use 256 colors if they're available, else default to 
 " 16 for the sad people who still use non-256 terminals
+colorscheme fruit
 if &term == "xterm"
     set t_Co=256
+    colorscheme lucius
 endif
+
+hi Normal guifg=White guibg=grey12
+"set global font
+set gfn=Monaco\ 10
 
 " disable auto commenting..
 au FileType * setl fo-=cro
