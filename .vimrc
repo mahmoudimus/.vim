@@ -91,6 +91,8 @@ vnoremap <F5> <C-C>:update<CR><C-C>:!make run<CR><CR>
 
 set nobackup        " don't back up file before saving
 set autowrite       " automatically save before making
+" set backupdir=~/.vim/sessions
+" set dir=~/.vim/sessions
 set history=500
 
 "set co=80
@@ -109,11 +111,15 @@ set number          " show line numbers
 set ruler           " show ruler
 set showcmd         " show command line
 
+
 set expandtab       " turns tabs into spaces
 set tabstop=4       " number of spaces per tab
 set autoindent      
 set nosmartindent
 set shiftwidth=4    " number of spaces per shift
+
+" Don't fucking out outdent hashes
+" inoremap # X#
 
 set showmatch       " brace matching
 syntax on           " syntax highlighting
@@ -137,7 +143,7 @@ endif
 
 " filetype plugins are now turned on
 filetype plugin on
-filetype indent on
+" filetype indent on
 
 " adding omnifunc auto completion
 autocmd FileType python set omnifunc=pythoncomplete#Complete
@@ -175,7 +181,13 @@ endif
 
 hi Normal guifg=White guibg=grey12
 "set global font
-set gfn=Monaco\ 10
+"set gfn=Monaco\ 10
+"set gfn=Inconsolata-dz\ Medium\ 9
+"set gfn=Consolas\ 10
+set gfn=Menlo\ 9
+
+" don't have a toolbar, who the fuck uses those?
+set guioptions-=T
 
 " disable auto commenting..
 au FileType * setl fo-=cro
@@ -196,11 +208,16 @@ highlight OverLength ctermbg=red ctermfg=white guibg=#592929
 
 " match OverLength /\%81v.*/
 " au BufWinEnter * let w:m1=matchadd('Search', '\%<81v.\%>77v', -1)
-au BufWinEnter * let w:ol=matchadd('OverLength', '\%>81v.\+', -1)
+" Only over match for 79 on python files
+au BufWinEnter *.py let w:ol=matchadd('OverLength', '\%>79v.\+', -1)
 
 " Switch off :match highlighting.
 " python syntax highlighting
 :let python_highlight_all = 1
+
+" XML folding
+let g:xml_syntax_folding=1
+au FileType xml setlocal foldmethod=syntax
 
 "  Define this variable to make the plugin show the buftabs in the statusline
 "  instead of the command line. It is a good idea to configure vim to show
