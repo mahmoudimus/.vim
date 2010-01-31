@@ -57,14 +57,6 @@ vnoremap <C-D> <LT>
 " CTRL-TAB inserts a tab character (i.e., does not replace tab with spaces)
 inoremap <C-Tab> <C-V><Tab>
 
-" I don't like the following remapping below, I am a big Ctrl+B/F fan
-" CTRL-F does Find dialog instead of page forward
-" noremap <C-F> :promptfind<CR>
-"vnoremap <C-F> y:promptfind <C-R>"<CR>
-"onoremap <C-F> <C-C>:promptfind<CR>
-"inoremap <C-F> <C-O>:promptfind<CR>
-"cnoremap <C-F> <C-C>:promptfind<CR>
-
 " CTRL-H does Replace dialog instead of character left
 noremap <C-H> :promptrepl<CR>
 vnoremap <C-H> y:promptrepl <C-R>"<CR>
@@ -118,9 +110,6 @@ set autoindent
 set nosmartindent
 set shiftwidth=4    " number of spaces per shift
 
-" Don't fucking out outdent hashes
-" inoremap # X#
-
 set showmatch       " brace matching
 syntax on           " syntax highlighting
 
@@ -135,14 +124,62 @@ if has('autocmd')
     autocmd GUIEnter * set vb t_vb=
 endif 
 
-"don't start in insert mode, that's annoying
-"start               " start vim in insert mode
+" SystemOS returns the OS that vim is running on
+function! SystemOS()
+	if has("win32") || has("win64")
+    	return "windows"
+	elseif has("mac")
+		return "mac"
+	else
+    	return "linux"
+  	endif
+endfunction
 
-"        set <S-Up>="        set <S-Down>=
+hi Normal guifg=White guibg=grey12
+
+" Needs to be before the gui_running check
+" Do not use .gvimrc because that fucks up my 
+" autocmd BufWinEnter stuff
+if has("gui_running")
+    set guioptions-=T " don't show the toolbar
+    set t_Co=256
+    colorscheme lucius
+else
+    colorscheme fruit
+    " use 256 colors if they're available, else default to 
+    " 16 for the sad people who still use non-256 terminals   
+    if &term == "xterm"
+        set t_Co=256
+        colorscheme lucius
+    endif
+endif
+
+if SystemOS() == "mac"
+    set gfn=Monaco:h9
+elseif SystemOS() == "windows"
+    set gfn=Consolas:h10
+else
+    set gfn=Menlo\ 9
+endif
+
+" show the tab number on the tabs followed by the basename
+" set guitablabel=%m%N\ %f
+
+" match highlights
+" ================= 
+highlight OverLength ctermbg=red ctermfg=white guibg=#592929
+" Only over match for 79 on python files
+au BufWinEnter *.py let w:ol=matchadd('OverLength', '\%>79v.\+', -1)
+
+" Switch off :match highlighting.
+" python syntax highlighting
+:let python_highlight_all = 1
 
 
 " filetype plugins are now turned on
 filetype plugin on
+" do not turn on filetype indent on, otherwise everytime we write a #
+" it goes to the beginning of the line and that's annoying.
 " filetype indent on
 
 " adding omnifunc auto completion
@@ -169,26 +206,6 @@ imap <C-@> <C-Space>
 map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
-" colorscheme desert
-" colorscheme ir_black
-" use 256 colors if they're available, else default to 
-" 16 for the sad people who still use non-256 terminals
-colorscheme fruit
-if &term == "xterm"
-    set t_Co=256
-    colorscheme lucius
-endif
-
-hi Normal guifg=White guibg=grey12
-"set global font
-"set gfn=Monaco\ 10
-"set gfn=Inconsolata-dz\ Medium\ 9
-"set gfn=Consolas\ 10
-set gfn=Menlo\ 9
-
-" don't have a toolbar, who the fuck uses those?
-set guioptions-=T
-
 " disable auto commenting..
 au FileType * setl fo-=cro
 
@@ -196,28 +213,13 @@ au FileType * setl fo-=cro
 noremap bT :bprev<CR>
 noremap bt :bnext<CR>
 
-" show the tab number on the tabs followed by the basename
-" set guitablabel=%m%N\ %f
-
-" global settings for buff list, show only basename of the file
-:let g:buftabs_only_basename=1
-
-" match highlights
-" ================= 
-highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-
-" match OverLength /\%81v.*/
-" au BufWinEnter * let w:m1=matchadd('Search', '\%<81v.\%>77v', -1)
-" Only over match for 79 on python files
-au BufWinEnter *.py let w:ol=matchadd('OverLength', '\%>79v.\+', -1)
-
-" Switch off :match highlighting.
-" python syntax highlighting
-:let python_highlight_all = 1
-
 " XML folding
 let g:xml_syntax_folding=1
 au FileType xml setlocal foldmethod=syntax
+
+
+" global settings for buff list, show only basename of the file
+:let g:buftabs_only_basename=1
 
 "  Define this variable to make the plugin show the buftabs in the statusline
 "  instead of the command line. It is a good idea to configure vim to show
