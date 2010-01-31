@@ -165,16 +165,34 @@ endif
 " show the tab number on the tabs followed by the basename
 " set guitablabel=%m%N\ %f
 
-" match highlights
-" ================= 
+"=========================================
+" HIGHLIGHTING AND VARIOUS MATCHING RULES
+"=========================================
 highlight OverLength ctermbg=red ctermfg=white guibg=#592929
-" Only over match for 79 on python files
-au BufWinEnter *.py let w:ol=matchadd('OverLength', '\%>79v.\+', -1)
+" When entering Vim, call HighlightOverLength and colorize the files for the
+" first window only.
+autocmd VimEnter * call HighlightOverLength() 
+" Define a window-local variable called 'created' that tells us if this window
+" has been previously created
+autocmd VimEnter * let w:created=1
+
+" On every window entry, call highlight overlength
+autocmd WinEnter * call HighlightOverLength()
+
+fu! HighlightOverLength()
+    if !exists('w:created')
+        " Only over match for 79 on python files
+        au BufEnter,BufWinEnter *.py let w:ol=matchadd('OverLength', '\%>79v.\+', -1)
+    endif
+endfunc
 
 " Switch off :match highlighting.
 " python syntax highlighting
 :let python_highlight_all = 1
 
+"=========================================
+" FILE TYPES AND STUFF
+"=========================================
 
 " filetype plugins are now turned on
 filetype plugin on
